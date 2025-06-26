@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Number Guessing Game</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f0f8ff;
+      padding: 20px;
+      max-width: 500px;
+      margin: auto;
+    }
+    .log { margin-top: 20px; }
+    input[type="number"] {
+      padding: 8px;
+      margin: 5px 0;
+      width: 100%;
+    }
+    button {
+      padding: 10px 20px;
+      background-color: teal;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: darkcyan;
+    }
+  </style>
+</head>
+<body>
+  <h2>🎮 Number Guessing Game</h2>
+  <div id="gameArea">
+    <p id="intro"></p>
+    <input type="number" id="guessInput" placeholder="Enter a number 1-100" min="1" max="100" />
+    <button onclick="makeGuess()">Guess</button>
+    <p class="log" id="feedback"></p>
+    <p class="log" id="attempts"></p>
+  </div>
+
+  <script>
+    let number = Math.floor(Math.random() * 100) + 1;
+    let attempts = 0;
+    const maxAttempts = 6;
+
+    let name = prompt("What's your name?");
+    if (!name) name = "Player";
+    document.getElementById("intro").textContent = `${name}, guess a number between 1 and 100!`;
+
+    function makeGuess() {
+      const guess = parseInt(document.getElementById("guessInput").value);
+      if (!guess || guess < 1 || guess > 100) {
+        document.getElementById("feedback").textContent = "⛔ Please enter a number between 1 and 100.";
+        return;
+      }
+
+      attempts++;
+      if (guess === number) {
+        document.getElementById("feedback").textContent = `🎉 Congrats ${name}, you guessed it in ${attempts} attempts!`;
+        document.getElementById("attempts").textContent = "";
+        endGame();
+      } else if (attempts >= maxAttempts) {
+        document.getElementById("feedback").textContent = `😢 Sorry, ${name}. The correct number was ${number}.`;
+        endGame();
+      } else {
+        document.getElementById("feedback").textContent = guess < number ? "📉 Too low!" : "📈 Too high!";
+        document.getElementById("attempts").textContent = `Attempts left: ${maxAttempts - attempts}`;
+      }
+    }
+
+    function endGame() {
+      document.getElementById("guessInput").disabled = true;
+      const btn = document.querySelector("button");
+      btn.textContent = "Play Again";
+      btn.onclick = () => location.reload();
+    }
+  </script>
+</body>
+</html>
